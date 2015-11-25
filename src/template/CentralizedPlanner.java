@@ -50,6 +50,21 @@ public class CentralizedPlanner
 
     }
 
+    public CentralizedPlanner(Vehicle v, ArrayList<Task> tasks)
+    {
+        this.jobList = new ArrayList<>(vehicles.size());
+        CentralizedPlanner.tasks = getArray(tasks);
+        CentralizedPlanner.vehicles = new ArrayList<>();
+        CentralizedPlanner.vehicles.add(v);
+        this.neighbours = new HashSet<>();
+
+        selectInitialSolution();
+
+        this.bestList = new ArrayList<>();
+        this.finalCost = Double.MAX_VALUE;
+
+    }
+
     /**
      * Remove both pickup and delivery of a task from jobList
      *
@@ -107,6 +122,16 @@ public class CentralizedPlanner
     }
 
     private Task[] getArray(TaskSet tasks)
+    {
+        Task[] taskArray = new Task[tasks.size()];
+        for (Task task : tasks)
+        {
+            taskArray[task.id] = task;
+        }
+        return taskArray;
+    }
+
+    private Task[] getArray(ArrayList<Task> tasks)
     {
         Task[] taskArray = new Task[tasks.size()];
         for (Task task : tasks)

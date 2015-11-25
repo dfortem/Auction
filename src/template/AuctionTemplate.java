@@ -2,6 +2,7 @@ package template;
 
 //the list of imports
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -24,12 +25,17 @@ import logist.topology.Topology.City;
 @SuppressWarnings("unused")
 public class AuctionTemplate implements AuctionBehavior {
 
+	private final int TOTAL_ITERATIONS = 10000;
+
 	private Topology topology;
 	private TaskDistribution distribution;
 	private Agent agent;
 	private Random random;
 	private Vehicle vehicle;
 	private City currentCity;
+
+    private ArrayList<Task> carriedTasks = new ArrayList<>();
+    private long currentCost;
 
 	@Override
 	public void setup(Topology topology, TaskDistribution distribution,
@@ -57,12 +63,11 @@ public class AuctionTemplate implements AuctionBehavior {
 
 		if (vehicle.capacity() < task.weight)
 			return null;
+        ArrayList<Task> tasks = new ArrayList<>(carriedTasks);
+        tasks.add(task);
+        long newCost = computeCost(tasks);
 
-		long distanceTask = task.pickupCity.distanceUnitsTo(task.deliveryCity);
-		long distanceSum = distanceTask
-				+ currentCity.distanceUnitsTo(task.pickupCity);
-		double marginalCost = Measures.unitsToKM(distanceSum
-				* vehicle.costPerKm());
+        double marginalCost = Math.abs(newCost - currentCost);
 
 		double ratio = 1.0 + (random.nextDouble() * 0.05 * task.id);
 		double bid = ratio * marginalCost;
@@ -72,39 +77,37 @@ public class AuctionTemplate implements AuctionBehavior {
 
 	@Override
 	public List<Plan> plan(List<Vehicle> vehicles, TaskSet tasks) {
-		
-//		System.out.println("Agent " + agent.id() + " has tasks " + tasks);
 
-		Plan planVehicle1 = naivePlan(vehicle, tasks);
+		long time_start = System.currentTimeMillis();
 
-		List<Plan> plans = new ArrayList<Plan>();
-		plans.add(planVehicle1);
-		while (plans.size() < vehicles.size())
-			plans.add(Plan.EMPTY);
+		CentralizedPlanner plans = new CentralizedPlanner(vehicles, tasks);
+		int counter = 0;
+		do{
+			plans.chooseNeighbours();
+			plans.localChoice();
+			counter++;
+		}while(counter < TOTAL_ITERATIONS);
 
-		return plans;
+		long time_end = System.currentTimeMillis();
+		long duration = time_end - time_start;
+		System.out.println("The plan was generated in "+duration+" milliseconds.");
+		List<Plan> finalPlans = plans.getPlan();
+		System.out.println(finalPlans.toString());
+
+		return finalPlans;
 	}
 
-	private Plan naivePlan(Vehicle vehicle, TaskSet tasks) {
-		City current = vehicle.getCurrentCity();
-		Plan plan = new Plan(current);
+    private long computeCost (ArrayList<Task> tasks){
+        CentralizedPlanner plans = new CentralizedPlanner(vehicle, tasks);
+        int counter = 0;
+        do{
+            plans.chooseNeighbours();
+            plans.localChoice();
+            counter++;
+        }while(counter < TOTAL_ITERATIONS);
 
-		for (Task task : tasks) {
-			// move: current city => pickup location
-			for (City city : current.pathTo(task.pickupCity))
-				plan.appendMove(city);
+        List<Plan> finalPlans = plans.getPlan();
+        return (long) finalPlans.get(0).totalDistance()*vehicle.costPerKm();
+    }
 
-			plan.appendPickup(task);
-
-			// move: pickup location => delivery location
-			for (City city : task.path())
-				plan.appendMove(city);
-
-			plan.appendDelivery(task);
-
-			// set current city
-			current = task.deliveryCity;
-		}
-		return plan;
-	}
 }
