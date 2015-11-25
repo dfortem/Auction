@@ -1,64 +1,14 @@
-11:34:09.946 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/test/auction-dummyAgent-dummyAgent2.xml -a tournament/test/agents.xml config/auction.xml dummyAgent dummyAgent2
-11:34:10.125 CONFIG | Reading config/auction.xml
-11:34:10.209 CONFIG | Reading config/settings_auction.xml
-11:34:10.467 CONFIG | Reading config/topology/england.xml
-11:34:10.491 CONFIG | Reading tournament/test/agents.xml
-11:34:10.541 WARNING | logist.LogistException: agent dummyAgent2 crashed: logist.LogistException: Could not create 'interface logist.behavior.AuctionBehavior': logist.behavior.AuctionBehavior
-11:34:10.547 WARNING | 	at logist.agent.TimeoutGuard.schedule(TimeoutGuard.java:51)
-11:34:10.548 WARNING | 	at logist.agent.AuctionAgent.setup(AuctionAgent.java:53)
-11:34:10.549 WARNING | 	at logist.simulation.Manager.setup(Manager.java:86)
-11:34:10.550 WARNING | 	at logist.simulation.Manager.run(Manager.java:59)
-11:34:10.552 WARNING | 	at logist.LogistPlatform.main(LogistPlatform.java:126)
-11:34:10.553 WARNING | Caused by: java.util.concurrent.ExecutionException: logist.LogistException: Could not create 'interface logist.behavior.AuctionBehavior': logist.behavior.AuctionBehavior
-11:34:10.554 WARNING | 	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
-11:34:10.555 WARNING | 	at java.util.concurrent.FutureTask.get(FutureTask.java:206)
-11:34:10.556 WARNING | 	at logist.agent.TimeoutGuard.schedule(TimeoutGuard.java:46)
-11:34:10.557 WARNING | 	... 4 more
-11:34:10.558 WARNING | Caused by: logist.LogistException: Could not create 'interface logist.behavior.AuctionBehavior': logist.behavior.AuctionBehavior
-11:34:10.559 WARNING | 	at logist.agent.AuctionAgent$1.run(AuctionAgent.java:65)
-11:34:10.560 WARNING | 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
-11:34:10.560 WARNING | 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
-11:34:10.561 WARNING | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-11:34:10.562 WARNING | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-11:34:10.563 WARNING | 	at java.lang.Thread.run(Thread.java:745)
-11:34:10.564 WARNING | Caused by: java.lang.InstantiationException: logist.behavior.AuctionBehavior
-11:34:10.564 WARNING | 	at java.lang.Class.newInstance(Class.java:423)
-11:34:10.565 WARNING | 	at logist.agent.AuctionAgent$1.run(AuctionAgent.java:58)
-11:34:10.565 WARNING | 	... 5 more
-11:34:10.566 WARNING | Caused by: java.lang.NoSuchMethodException: logist.behavior.AuctionBehavior.<init>()
-11:34:10.567 WARNING | 	at java.lang.Class.getConstructor0(Class.java:3074)
-11:34:10.568 WARNING | 	at java.lang.Class.newInstance(Class.java:408)
-11:34:10.569 WARNING | 	... 6 more
-11:34:10.730 SEVERE | LogistPlatform returned error code 253
-11:34:10.734 FINE | Run command: java -Xmx1024m -classpath ../logist/logist.jar logist.LogistPlatform -o tournament/test/auction-dummyAgent2-dummyAgent.xml -a tournament/test/agents.xml config/auction.xml dummyAgent2 dummyAgent
-11:34:10.890 CONFIG | Reading config/auction.xml
-11:34:10.960 CONFIG | Reading config/settings_auction.xml
-11:34:11.091 CONFIG | Reading config/topology/england.xml
-11:34:11.111 CONFIG | Reading tournament/test/agents.xml
-11:34:11.148 WARNING | logist.LogistException: agent dummyAgent2 crashed: logist.LogistException: Could not create 'interface logist.behavior.AuctionBehavior': logist.behavior.AuctionBehavior
-11:34:11.148 WARNING | 	at logist.agent.TimeoutGuard.schedule(TimeoutGuard.java:51)
-11:34:11.149 WARNING | 	at logist.agent.AuctionAgent.setup(AuctionAgent.java:53)
-11:34:11.150 WARNING | 	at logist.simulation.Manager.setup(Manager.java:86)
-11:34:11.150 WARNING | 	at logist.simulation.Manager.run(Manager.java:59)
-11:34:11.151 WARNING | 	at logist.LogistPlatform.main(LogistPlatform.java:126)
-11:34:11.152 WARNING | Caused by: java.util.concurrent.ExecutionException: logist.LogistException: Could not create 'interface logist.behavior.AuctionBehavior': logist.behavior.AuctionBehavior
-11:34:11.152 WARNING | 	at java.util.concurrent.FutureTask.report(FutureTask.java:122)
-11:34:11.155 WARNING | 	at java.util.concurrent.FutureTask.get(FutureTask.java:206)
-11:34:11.157 WARNING | 	at logist.agent.TimeoutGuard.schedule(TimeoutGuard.java:46)
-11:34:11.157 WARNING | 	... 4 more
-11:34:11.158 WARNING | Caused by: logist.LogistException: Could not create 'interface logist.behavior.AuctionBehavior': logist.behavior.AuctionBehavior
-11:34:11.162 WARNING | 	at logist.agent.AuctionAgent$1.run(AuctionAgent.java:65)
-11:34:11.163 WARNING | 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
-11:34:11.164 WARNING | 	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
-11:34:11.165 WARNING | 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
-11:34:11.165 WARNING | 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
-11:34:11.166 WARNING | 	at java.lang.Thread.run(Thread.java:745)
-11:34:11.167 WARNING | Caused by: java.lang.InstantiationException: logist.behavior.AuctionBehavior
-11:34:11.173 WARNING | 	at java.lang.Class.newInstance(Class.java:423)
-11:34:11.174 WARNING | 	at logist.agent.AuctionAgent$1.run(AuctionAgent.java:58)
-11:34:11.175 WARNING | 	... 5 more
-11:34:11.175 WARNING | Caused by: java.lang.NoSuchMethodException: logist.behavior.AuctionBehavior.<init>()
-11:34:11.176 WARNING | 	at java.lang.Class.getConstructor0(Class.java:3074)
-11:34:11.177 WARNING | 	at java.lang.Class.newInstance(Class.java:408)
-11:34:11.177 WARNING | 	... 6 more
-11:34:11.356 SEVERE | LogistPlatform returned error code 253
+04:15:58.175 FINE | Run command: java -Xmx1024m -classpath /Users/Daniel/Dropbox/EPFLMaster/IntelligentAgents/Assignments/logist/logist.jar logist.LogistPlatform -o tournament/test/auction-auctionDummy-dummyAgent.xml -a tournament/test/agents.xml config/auction.xml auctionDummy dummyAgent
+04:15:58.371 CONFIG | Reading config/auction.xml
+04:15:58.493 CONFIG | Reading config/settings_auction.xml
+04:15:58.709 CONFIG | Reading config/topology/england.xml
+04:15:58.755 CONFIG | Reading tournament/test/agents.xml
+04:16:06.537 CONFIG | Wrote tournament/test/auction-auctionDummy-dummyAgent.xml
+04:16:06.610 INFO | LogistPlatform finished successfully!
+04:16:06.626 FINE | Run command: java -Xmx1024m -classpath /Users/Daniel/Dropbox/EPFLMaster/IntelligentAgents/Assignments/logist/logist.jar logist.LogistPlatform -o tournament/test/auction-dummyAgent-auctionDummy.xml -a tournament/test/agents.xml config/auction.xml dummyAgent auctionDummy
+04:16:06.798 CONFIG | Reading config/auction.xml
+04:16:06.902 CONFIG | Reading config/settings_auction.xml
+04:16:07.059 CONFIG | Reading config/topology/england.xml
+04:16:07.097 CONFIG | Reading tournament/test/agents.xml
+04:16:17.475 CONFIG | Wrote tournament/test/auction-dummyAgent-auctionDummy.xml
+04:16:17.880 INFO | LogistPlatform finished successfully!

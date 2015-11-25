@@ -3,13 +3,13 @@
 <agents>
 	<!-- An auto-generated list of agents and their behavior classes -->
 	<!--  - jar directory : agents/ -->
-	<!--  - generated on  : Tue Nov 24 11:33:10 CET 2015 -->
+	<!--  - generated on  : Wed Nov 25 16:15:53 CET 2015 -->
+	<agent name="auctionDummy">
+		<set class-path="agents/auctionDummy.jar"/>
+		<set class-name="template.AuctionTemplate"/>
+	</agent>
 	<agent name="dummyAgent">
 		<set class-path="agents/dummyAgent.jar"/>
 		<set class-name="template.AuctionTemplate"/>
-	</agent>
-	<agent name="dummyAgent2">
-		<set class-path="agents/dummyAgent.jar"/>
-		<set class-name="logist.behavior.AuctionBehavior"/>
 	</agent>
 </agents>

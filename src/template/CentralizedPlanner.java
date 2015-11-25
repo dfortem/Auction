@@ -476,13 +476,6 @@ public class CentralizedPlanner
             finalCost = minCost;
         }
 
-        int cost = 0;
-        int vehicleID = 0;
-        for (LinkedList<Job> vehicleJob : bestSolution)
-        {
-            cost += computeCost(vehicleJob, vehicles.get(vehicleID));
-            vehicleID++;
-        }
         double probability = random.nextDouble();
 
         double tempCost1 = 0;
