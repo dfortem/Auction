@@ -50,12 +50,11 @@ public class CentralizedPlanner
 
     }
 
-    public CentralizedPlanner(Vehicle v, ArrayList<Task> tasks)
+    public CentralizedPlanner(List<Vehicle> vehicles, ArrayList<Task> tasks)
     {
-        this.jobList = new ArrayList<>(vehicles.size());
+        this.jobList = new ArrayList<>();
         CentralizedPlanner.tasks = getArray(tasks);
-        CentralizedPlanner.vehicles = new ArrayList<>();
-        CentralizedPlanner.vehicles.add(v);
+        CentralizedPlanner.vehicles = vehicles;
         this.neighbours = new HashSet<>();
 
         selectInitialSolution();
@@ -124,9 +123,11 @@ public class CentralizedPlanner
     private Task[] getArray(TaskSet tasks)
     {
         Task[] taskArray = new Task[tasks.size()];
+        int i=0;
         for (Task task : tasks)
         {
-            taskArray[task.id] = task;
+            taskArray[i] = task;
+            i++;
         }
         return taskArray;
     }
@@ -134,9 +135,11 @@ public class CentralizedPlanner
     private Task[] getArray(ArrayList<Task> tasks)
     {
         Task[] taskArray = new Task[tasks.size()];
+        int i = 0;
         for (Task task : tasks)
         {
-            taskArray[task.id] = task;
+            taskArray[i] = task;
+            i++;
         }
         return taskArray;
     }
@@ -244,12 +247,13 @@ public class CentralizedPlanner
 
         List<Job> referencePlan = newPlan.get(referenceIndex);
 
-        Task task = tasks[referencePlan.get(0).getT()];
-        removeJob(newPlan, referenceIndex, task.id);
+        int taskIndex = referencePlan.get(0).getT();
+        Task task = tasks[taskIndex];
+        removeJob(newPlan, referenceIndex, taskIndex);
 
         LinkedList<Job> vehiclePlan = newPlan.get(index);
-        vehiclePlan.addFirst(new Job(task.id, DELIVERY));
-        vehiclePlan.addFirst(new Job(task.id, PICKUP));
+        vehiclePlan.addFirst(new Job(taskIndex, DELIVERY));
+        vehiclePlan.addFirst(new Job(taskIndex, PICKUP));
 
         return newPlan;
     }

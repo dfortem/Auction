@@ -31,8 +31,7 @@ public class AuctionTemplate implements AuctionBehavior {
 	private TaskDistribution distribution;
 	private Agent agent;
 	private Random random;
-	private Vehicle vehicle;
-	private City currentCity;
+	private List<Vehicle> vehicles;
 
     private ArrayList<Task> carriedTasks = new ArrayList<>();
     private long currentCost;
@@ -44,25 +43,26 @@ public class AuctionTemplate implements AuctionBehavior {
 		this.topology = topology;
 		this.distribution = distribution;
 		this.agent = agent;
-		this.vehicle = agent.vehicles().get(0);
-		this.currentCity = vehicle.homeCity();
+		this.vehicles = agent.vehicles();
 
-		long seed = -9019554669489983951L * currentCity.hashCode() * agent.id();
+
+		long seed = -9019554669489983951L * System.currentTimeMillis() * agent.id();
 		this.random = new Random(seed);
 	}
 
 	@Override
 	public void auctionResult(Task previous, int winner, Long[] bids) {
-		if (winner == agent.id()) {
-			currentCity = previous.deliveryCity;
-		}
+
 	}
 	
 	@Override
 	public Long askPrice(Task task) {
 
-		if (vehicle.capacity() < task.weight)
-			return null;
+		for (Vehicle vehicle : vehicles){
+            if (vehicle.capacity() < task.weight) {
+                return null;
+            }
+        }
         ArrayList<Task> tasks = new ArrayList<>(carriedTasks);
         tasks.add(task);
         long newCost = computeCost(tasks);
@@ -98,7 +98,7 @@ public class AuctionTemplate implements AuctionBehavior {
 	}
 
     private long computeCost (ArrayList<Task> tasks){
-        CentralizedPlanner plans = new CentralizedPlanner(vehicle, tasks);
+        CentralizedPlanner plans = new CentralizedPlanner(vehicles, tasks);
         int counter = 0;
         do{
             plans.chooseNeighbours();
@@ -107,7 +107,11 @@ public class AuctionTemplate implements AuctionBehavior {
         }while(counter < TOTAL_ITERATIONS);
 
         List<Plan> finalPlans = plans.getPlan();
-        return (long) finalPlans.get(0).totalDistance()*vehicle.costPerKm();
+        long cost = 0L;
+        for (Vehicle vehicle : vehicles){
+            cost += finalPlans.get(vehicle.id()).totalDistance()*vehicle.costPerKm();
+        }
+        return cost;
     }
 
 }
