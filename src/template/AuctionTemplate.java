@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import logist.Measures;
 import logist.behavior.AuctionBehavior;
 import logist.agent.Agent;
@@ -33,8 +34,10 @@ public class AuctionTemplate implements AuctionBehavior {
 	private Random random;
 	private List<Vehicle> vehicles;
 
-    private ArrayList<Task> carriedTasks = new ArrayList<>();
+    private final double epsilon = 0.1;
     private long currentCost;
+    private double ratio = 1;
+    private ArrayList<Task> carriedTasks = new ArrayList<>();
 
 	@Override
 	public void setup(Topology topology, TaskDistribution distribution,
@@ -52,7 +55,25 @@ public class AuctionTemplate implements AuctionBehavior {
 
 	@Override
 	public void auctionResult(Task previous, int winner, Long[] bids) {
-
+        if (winner == agent.id()){
+            carriedTasks.add(previous);
+            currentCost = computeCost(carriedTasks);
+        }
+        if (bids.length > 1) {
+            long difference = Math.abs(bids[0] - bids[1]);
+            long betterBid;
+            if (winner == agent.id()){
+                betterBid = bids[agent.id()] + difference/2;
+            } else {
+                betterBid = bids[agent.id()] - difference/2;
+            }
+            if (currentCost != 0) {
+                ratio = betterBid / currentCost;
+            }
+            if (ratio < 1) {
+                ratio = 1;
+            }
+        }
 	}
 	
 	@Override
@@ -69,7 +90,25 @@ public class AuctionTemplate implements AuctionBehavior {
 
         double marginalCost = Math.abs(newCost - currentCost);
 
-		double ratio = 1.0 + (random.nextDouble() * 0.05 * task.id);
+        if (marginalCost < epsilon){
+            double costPerKM = Double.MAX_VALUE;
+            for (Vehicle vehicle : vehicles){
+                if (costPerKM > vehicle.costPerKm()){
+                    costPerKM = vehicle.costPerKm();
+                }
+            }
+            marginalCost = (long) task.pickupCity.distanceTo(task.deliveryCity)/2*costPerKM;
+        }
+//        System.out.println("task id: " + task.id);
+//        System.out.println(carriedTasks);
+//        System.out.println(tasks);
+//        System.out.println("newCost: " + newCost + " currentCost before: " + currentCost);
+        if (carriedTasks.size() < 1) {
+            ratio = 0.75;
+        } else if (carriedTasks.size() < 2) {
+            ratio = 0.95;
+        }
+
 		double bid = ratio * marginalCost;
 
 		return (long) Math.round(bid);
