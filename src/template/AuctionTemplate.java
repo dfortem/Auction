@@ -55,6 +55,7 @@ public class AuctionTemplate implements AuctionBehavior {
 
 	@Override
 	public void auctionResult(Task previous, int winner, Long[] bids) {
+        long tempCost = currentCost;
         if (winner == agent.id()){
             carriedTasks.add(previous);
             currentCost = computeCost(carriedTasks);
@@ -67,8 +68,8 @@ public class AuctionTemplate implements AuctionBehavior {
             } else {
                 betterBid = bids[agent.id()] - difference/2;
             }
-            if (currentCost != 0) {
-                ratio = betterBid / currentCost;
+            if (bids[agent.id()] != 0) {
+                ratio = betterBid / bids[agent.id()] * ratio;
             }
             if (ratio < 1) {
                 ratio = 1;
@@ -99,10 +100,6 @@ public class AuctionTemplate implements AuctionBehavior {
             }
             marginalCost = (long) task.pickupCity.distanceTo(task.deliveryCity)/2*costPerKM;
         }
-//        System.out.println("task id: " + task.id);
-//        System.out.println(carriedTasks);
-//        System.out.println(tasks);
-//        System.out.println("newCost: " + newCost + " currentCost before: " + currentCost);
         if (carriedTasks.size() < 1) {
             ratio = 0.75;
         } else if (carriedTasks.size() < 2) {
